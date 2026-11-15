@@ -1,0 +1,18 @@
+﻿# Publishes everything in apps/ as the latest release, made by GitHub's bot (the old one is removed first).
+name: Publish
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --cleanup-tag --yes || true
+          gh release create latest apps/* --title "Vanta Tweaks" --latest \
+            --notes "Download the app you need. Paid apps ask for your license key the first time you start them."
